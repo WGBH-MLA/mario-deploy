@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  labels:
+    app: mario
+  name: mario
+
+spec:
+  selector:
+    matchLabels:
+      app: mario
+
+  template:
+    metadata:
+      labels:
+        app: mario
+
+    spec:
+      containers:
+        - image: ghcr.io/wgbh-mla/mario:main
+          imagePullPolicy: Always
+          name: mario
+          command: ['rq', 'worker', '--with-scheduler']
+          resources:
+            limits:
+              cpu: '1000m'
+              memory: '2Gi'
+            requests:
+              cpu: '100m'
+              memory: '100Mi'
+          volumeMounts:
+            - mountPath: '/m'
+              name: media
+      volumes:
+        - name: media
+          persistentVolumeClaim:
+            claimName: media-pvc

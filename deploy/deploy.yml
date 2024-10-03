@@ -29,7 +29,9 @@ spec:
             requests:
               cpu: 200m
               memory: 100Mi
-
+          envFrom:
+            - secretRef:
+                name: mario-secret
           volumeMounts:
             - mountPath: /root/.cache/
               name: cache

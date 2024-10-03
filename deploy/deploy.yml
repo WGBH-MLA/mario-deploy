@@ -18,21 +18,22 @@ spec:
 
     spec:
       containers:
-        - image: ghcr.io/wgbh-mla/mario:main
+        - image: ghcr.io/wgbh-mla/mario:pr-28
           imagePullPolicy: Always
           name: mario
-          command: ['rq', 'worker', '-s', '-u', 'redis://redis']
+          command: ['/app/mario/pipelines/runner.py']
           resources:
             limits:
-              cpu: '1000m'
-              memory: '2Gi'
+              cpu: 4000m
+              memory: 8Gi
             requests:
-              cpu: '100m'
-              memory: '100Mi'
+              cpu: 200m
+              memory: 100Mi
+
           volumeMounts:
-            - mountPath: '/m'
-              name: media
+            - mountPath: /root/.cache/
+              name: cache
       volumes:
-        - name: media
+        - name: cache
           persistentVolumeClaim:
-            claimName: media-pvc
+            claimName: cache-pvc
